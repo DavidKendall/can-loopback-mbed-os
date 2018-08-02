@@ -3,7 +3,7 @@
 #include "fsl_flexcan.h"
 
 Ticker ticker;
-DigitalOut red(LED1);
+DigitalOut green(LED_GREEN);
 Serial pc(USBTX, USBRX); // tx, rx
 flexcan_config_t flexcanConfig;
 flexcan_rx_mb_config_t mbconfig;
@@ -15,7 +15,8 @@ void send(void) {
     counter += 1;
     txFrame.dataWord0 = counter;
     if (kStatus_Success == FLEXCAN_TransferSendBlocking(CAN0, 0, &txFrame)) {
-        printf("TxOk: %09d\n\r", counter);
+        printf("TxOk: %09ld\n\r", counter);
+        green = 1;
     } else {
         printf("Tx error\n\r");
     }
@@ -33,11 +34,12 @@ int main() {
     txFrame.type = kFLEXCAN_FrameTypeData; 
     txFrame.format = kFLEXCAN_FrameFormatStandard;
     txFrame.id = FLEXCAN_ID_STD(0x123);
-    pc.printf("CAN Loopback Test\n\r");
+    pc.printf("\n\rCAN Loopback Test\n\r");
     ticker.attach(send, 1);
     while(true) {
         if (kStatus_Success == FLEXCAN_TransferReceiveBlocking(CAN0, 1, &rxFrame)) {
-            printf("RxOk: %09d\n\r", rxFrame.dataWord0);
+            printf("RxOk: %09ld\n\r", rxFrame.dataWord0);
+            green = 0;
         } else {
             printf("No Rx\n\r");
         }

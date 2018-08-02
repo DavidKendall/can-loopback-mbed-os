@@ -15,10 +15,10 @@ void send(void) {
     counter += 1;
     txFrame.dataWord0 = counter;
     if (kStatus_Success == FLEXCAN_TransferSendBlocking(CAN0, 0, &txFrame)) {
-        printf("TxOk: %09ld\n\r", counter);
+        pc.printf("TxOk: %09ld\n\r", counter);
         green = 1;
     } else {
-        printf("Tx error\n\r");
+        pc.printf("Tx error\n\r");
     }
 }
 
@@ -38,10 +38,10 @@ int main() {
     ticker.attach(send, 1);
     while(true) {
         if (kStatus_Success == FLEXCAN_TransferReceiveBlocking(CAN0, 1, &rxFrame)) {
-            printf("RxOk: %09ld\n\r", rxFrame.dataWord0);
+            pc.printf("RxOk: %09ld\n\r", rxFrame.dataWord0);
             green = 0;
         } else {
-            printf("No Rx\n\r");
+            pc.printf("No Rx\n\r");
         }
     }
 }

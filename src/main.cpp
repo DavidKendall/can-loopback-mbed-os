@@ -22,13 +22,17 @@ void send(void) {
 }
 
 int main() {
+    red = 0;
+    green = 1;
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
     FLEXCAN_Init(CAN0, &flexcanConfig, 8000000UL);
+    FLEXCAN_SetTxMbConfig(CAN0, 0, true);
     txFrame.length = 4;
     txFrame.type = kFLEXCAN_FrameTypeData; 
     txFrame.format = kFLEXCAN_FrameFormatStandard;
     txFrame.id = FLEXCAN_ID_STD(0x123);
     ticker.attach(send, 1);
+    red = 1;
     while(true) {
     }
 }

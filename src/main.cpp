@@ -1,6 +1,9 @@
 #include <stdbool.h>
 #include "mbed.h"
+#include "MK64F12.h"
 #include "fsl_flexcan.h"
+
+#define TX_BUF_ID 8
 
 Ticker ticker;
 DigitalOut red(LED_RED);
@@ -13,8 +16,11 @@ uint32_t counter = 0;
 void send(void) {
     counter += 1;
     txFrame.dataWord0 = counter;
+    pc.printf("CAN Error Counter: %ld\n\r", CAN0->ECR);
+    pc.printf("CAN Status Flags: 0x%08X\n\r", FLEXCAN_GetStatusFlags(CAN0));
     pc.printf("Sending %09ld... ", counter);
-    if (kStatus_Success == FLEXCAN_TransferSendBlocking(CAN0, 0, &txFrame)) {
+    //if (kStatus_Success == FLEXCAN_TransferSendBlocking(CAN0, TX_BUF_ID, &txFrame)) {
+    if (kStatus_Success == FLEXCAN_WriteTxMb(CAN0, TX_BUF_ID, &txFrame)) {
         red = 1; // off
         green = 1 - green;
         pc.printf("Ok\n\r");
@@ -25,12 +31,26 @@ void send(void) {
     }
 }
 
+void can_pins_init(void) {
+
+    /* Enable the clock to the FLEXCAN module */
+    SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;
+
+    /* Enable the clock to PORT B */
+    SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+
+    /* Select the CAN function (Alternative 2) for pin 18 of PORT B */
+    PORTB->PCR[18] &= ~PORT_PCR_MUX_MASK;
+    PORTB->PCR[18] |= (2u << PORT_PCR_MUX_SHIFT);
+}
+
 int main() {
     red = 0;    // on
     green = 1;  // off
+    can_pins_init();
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
-    FLEXCAN_Init(CAN0, &flexcanConfig, 8000000UL);
-    FLEXCAN_SetTxMbConfig(CAN0, 0, true);
+    FLEXCAN_Init(CAN0, &flexcanConfig, 50000000UL);
+    FLEXCAN_SetTxMbConfig(CAN0, TX_BUF_ID, true);
     txFrame.length = 4;
     txFrame.type = kFLEXCAN_FrameTypeData; 
     txFrame.format = kFLEXCAN_FrameFormatStandard;
@@ -38,6 +58,8 @@ int main() {
     red = 1;    // off
     pc.printf("CAN Send Test\n\r");
     ticker.attach(send, 1);
+    pc.printf("OSC_CR[ERCLKEN]: %d\n\r", (OSC->CR & OSC_CR_ERCLKEN_MASK) ? 1 : 0);
+    pc.printf("Osc0ErClkFreq: %d\n\r", CLOCK_GetOsc0ErClkFreq());
     while(true) {
     }
 }

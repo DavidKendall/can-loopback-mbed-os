@@ -9,10 +9,23 @@ flexcan_rx_mb_config_t mbconfig;
 flexcan_frame_t rxFrame;
 uint32_t counter = 0;
 
+void can_pins_init(void) {
+
+    /* Enable the clock to the FLEXCAN module */
+    SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;
+
+    /* Enable the clock to PORT B */
+    SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+
+    /* Select the CAN function (Alternative 2) for pin 19 of PORT B */
+    PORTB->PCR[19] |= PORT_PCR_MUX(2);
+}
+
 int main() {
+    can_pins_init();
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
-    flexcanConfig.clkSrc = kFLEXCAN_ClkSrcPeri;
-    FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetFreq(kCLOCK_McgPeriphClk));
+    //flexcanConfig.clkSrc = kFLEXCAN_ClkSrcPeri;
+    FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetOsc0ErClkFreq());
     mbconfig.type = kFLEXCAN_FrameTypeData;
     mbconfig.format = kFLEXCAN_FrameFormatStandard;
     mbconfig.id = FLEXCAN_ID_STD(0x123);

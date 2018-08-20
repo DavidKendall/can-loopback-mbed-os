@@ -25,7 +25,7 @@ void send(void) {
 int main() {
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
     flexcanConfig.enableLoopBack = true;
-    FLEXCAN_Init(CAN0, &flexcanConfig, 8000000UL);
+    FLEXCAN_Init(CAN0, &flexcanConfig, 50000000UL);
     mbconfig.type = kFLEXCAN_FrameTypeData;
     mbconfig.format = kFLEXCAN_FrameFormatStandard;
     mbconfig.id = FLEXCAN_ID_STD(0x123);

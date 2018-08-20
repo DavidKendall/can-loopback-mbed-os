@@ -17,7 +17,8 @@ void can_pins_init(void) {
     /* Enable the clock to PORT B */
     SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
 
-    /* Select the CAN function (Alternative 2) for pin 19 of PORT B */
+    /* Select the CAN function (Alternative 2) for pins 18 and 19 of PORT B */
+    PORTB->PCR[18] |= PORT_PCR_MUX(2);
     PORTB->PCR[19] |= PORT_PCR_MUX(2);
 }
 

@@ -46,14 +46,14 @@ void can_pins_init(void) {
 int main() {
     red = 0;    // on
     green = 1;  // off
+    can_pins_init();
     pc.printf("OSC_CR[ERCLKEN]: %d\n\r", (OSC->CR & OSC_CR_ERCLKEN_MASK) ? 1 : 0);
     pc.printf("Osc0ErClkFreq: %d\n\r", CLOCK_GetOsc0ErClkFreq());
     //pc.printf("PeriphClkFreq: %d\n\r", CLOCK_GetFreq(kCLOCK_McgPeriphClk));
     pc.printf("PeriphClkFreq: %d\n\r", CLOCK_GetPll0Freq());
-    can_pins_init();
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
-    flexcanConfig.clkSrc = kFLEXCAN_ClkSrcPeri;
-    FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetBusClkFreq());
+    //flexcanConfig.clkSrc = kFLEXCAN_ClkSrcPeri;
+    FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetOsc0ErClkFreq());
     //FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetFreq(kCLOCK_McgPeriphClk));
     //FLEXCAN_Init(CAN0, &flexcanConfig, 50000000UL);
     FLEXCAN_SetTxMbConfig(CAN0, TX_BUF_ID, true);

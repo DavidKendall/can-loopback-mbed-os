@@ -11,7 +11,8 @@ uint32_t counter = 0;
 
 int main() {
     FLEXCAN_GetDefaultConfig(&flexcanConfig);
-    FLEXCAN_Init(CAN0, &flexcanConfig, 50000000UL);
+    flexcanConfig.clkSrc = kFLEXCAN_ClkSrcPeri;
+    FLEXCAN_Init(CAN0, &flexcanConfig, CLOCK_GetFreq(kCLOCK_McgPeriphClk));
     mbconfig.type = kFLEXCAN_FrameTypeData;
     mbconfig.format = kFLEXCAN_FrameFormatStandard;
     mbconfig.id = FLEXCAN_ID_STD(0x123);

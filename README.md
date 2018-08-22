@@ -1,4 +1,4 @@
-# A loopback program for Flexcan on FRDM-K64F
+# A sender program for Flexcan on FRDM-K64F
 
 ## Introduction
 
@@ -13,11 +13,13 @@ This repository contains the source.
    tools
    (https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads). 
 
-1. Clone the repository and set the current working directory to the new repository.
+1. Clone the repository, set the current working directory to the new 
+   repository, and checkout the snd branch.
 
      ```sh
-     $ git clone https://github.com/davidkendall/can-loopback-mbed-os
-     $ cd can-loopback-mbed-os
+     $ git clone https://github.com/davidkendall/can-mbed-os
+     $ cd can-mbed-os
+     $ git checkout snd
      ```
 
 1. Download the required libraries.
@@ -38,6 +40,7 @@ This repository contains the source.
      ```
    Notice that the `-f` (`--flash`) option causes the program to be loaded and
    executed. You should observe a sequence of lines in the terminal window,
-   reporting the value of a counter that is transmitted and received by the
-   CAN.
+   reporting the value of a counter that is transmitted by the
+   CAN. **Note** You will need to have a receiving node attached to the bus.
+   See the `rcv` branch.
 

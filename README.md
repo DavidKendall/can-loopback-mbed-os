@@ -13,11 +13,13 @@ This repository contains the source.
    tools
    (https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads). 
 
-1. Clone the repository and set the current working directory to the new repository.
+1. Clone the repository, set the current working directory to the new 
+   repository and checkout the rcv branch.
 
      ```sh
-     $ git clone https://github.com/davidkendall/can-loopback-mbed-os
-     $ cd can-loopback-mbed-os
+     $ git clone https://github.com/davidkendall/can-mbed-os
+     $ cd can-mbed-os
+     $ git checkout rcv
      ```
 
 1. Download the required libraries.

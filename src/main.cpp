@@ -2,7 +2,7 @@
 #include "mbed.h"
 #include "fsl_flexcan.h"
 
-#define RXBUFID 9
+#define RX_BUF_ID 9
 
 DigitalOut green(LED_GREEN);
 Serial pc(USBTX, USBRX); // tx, rx
@@ -31,10 +31,10 @@ int main() {
     mbconfig.type = kFLEXCAN_FrameTypeData;
     mbconfig.format = kFLEXCAN_FrameFormatStandard;
     mbconfig.id = FLEXCAN_ID_STD(0x123);
-    FLEXCAN_SetRxMbConfig(CAN0, RXBUFID, &mbconfig, true);
+    FLEXCAN_SetRxMbConfig(CAN0, RX_BUF_ID, &mbconfig, true);
     pc.printf("\n\rCAN Receiver Test\n\r");
     while(true) {
-        if (kStatus_Success == FLEXCAN_TransferReceiveBlocking(CAN0, RXBUFID, &rxFrame)) {
+        if (kStatus_Success == FLEXCAN_TransferReceiveBlocking(CAN0, RX_BUF_ID, &rxFrame)) {
             printf("RxOk: %09ld\n\r", rxFrame.dataWord0);
             green = 1 - green;
         } else {

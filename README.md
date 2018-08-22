@@ -1,4 +1,4 @@
-# A loopback program for Flexcan on FRDM-K64F
+# A receiver program for Flexcan on FRDM-K64F
 
 ## Introduction
 
@@ -37,7 +37,7 @@ This repository contains the source.
      $ mbed compile -t GCC_ARM -m K64F -f
      ```
    Notice that the `-f` (`--flash`) option causes the program to be loaded and
-   executed. You should observe a sequence of lines in the terminal window,
-   reporting the value of a counter that is transmitted and received by the
-   CAN.
+   executed. If you have a sending node on the CAN bus, you should observe a
+   sequence of lines in the terminal window, reporting the value of a counter
+   that is received by the CAN.
 

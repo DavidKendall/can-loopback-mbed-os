@@ -16,8 +16,8 @@ This repository contains the source.
 1. Clone the repository and set the current working directory to the new repository.
 
      ```sh
-     $ git clone https://github.com/davidkendall/can-loopback-mbed-os
-     $ cd can-loopback-mbed-os
+     $ git clone https://github.com/davidkendall/can-mbed-os
+     $ cd can-mbed-os
      ```
 
 1. Download the required libraries.
